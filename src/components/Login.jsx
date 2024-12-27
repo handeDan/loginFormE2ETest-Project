@@ -82,7 +82,7 @@ export default function Login() {
         );
         if (user) {
           setForm(initialForm);
-          history.push("/main");
+          history.push("/success");
         } else {
           history.push("/error");
         }
@@ -146,7 +146,7 @@ export default function Login() {
       </FormGroup>
 
       <FormGroup className="text-center p-4">
-        <Button disabled={!isValid} color="primary">
+        <Button type="submit" disabled={!isValid} color="primary">
           Sign In
         </Button>
       </FormGroup>
