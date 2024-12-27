@@ -19,7 +19,8 @@ const initialForm = {
 
 const errorMessages = {
   email: "Please enter a valid email address",
-  password: "Password must be at least 4 characters long",
+  password:
+    "Password must be at least 5 characters, at least one letter and one number",
 };
 export default function Login() {
   const [form, setForm] = useState(initialForm);
@@ -37,18 +38,24 @@ export default function Login() {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     return emailRegex.test(email);
   };
+  // password geçerliliğini kontrol eden regex:
+  //Minimum 5 characters, at least one letter and one number:
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{5,}$/;
+    return passwordRegex.test(password);
+  };
 
   useEffect(() => {
     // Geçerlilik kontrolü:
     const emailValid = validateEmail(form.email);
-    const passwordValid = form.password.length >= 4;
+    const passwordValid = validatePassword(form.password);
     const termsValid = form.terms;
     // Form geçerli mi?:
     setIsValid(emailValid && passwordValid && termsValid);
     // Hata durumlarını güncelle:
     setErrors({
       email: !emailValid,
-      password: form.password.length < 4,
+      password: !passwordValid,
       terms: !form.terms,
     });
   }, [form]); // form değiştiğinde tetiklenir..
@@ -57,6 +64,7 @@ export default function Login() {
     let { name, value, type } = event.target;
     value = type === "checkbox" ? event.target.checked : value;
     setForm({ ...form, [name]: value });
+    console.log(errors);
   };
 
   const handleSubmit = (event) => {
